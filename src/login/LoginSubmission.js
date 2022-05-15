@@ -1,5 +1,5 @@
 import React from 'react';
-import {Text, View} from 'react-native';
+import {Text, View, Alert} from 'react-native';
 import Login from './Login';
 //import {useNavigation} from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -92,7 +92,7 @@ export default () => {
 
   if (status === 'resolved') {
     // TODO: navigate away on submission success
-    alert('scucess');
+    Alert.alert('scucess');
     return null;
   }
 
