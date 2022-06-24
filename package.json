@@ -10,9 +10,15 @@
     "lint": "eslint ."
   },
   "dependencies": {
-    "@react-native-async-storage/async-storage": "^1.17.3",
+    "@react-native-async-storage/async-storage": "^1.17.6",
+    "@react-navigation/native": "^6.0.10",
+    "@react-navigation/native-stack": "^6.6.2",
     "react": "17.0.2",
-    "react-native": "0.68.1"
+    "react-native": "0.68.1",
+    "react-native-gesture-handler": "^2.4.2",
+    "react-native-reanimated": "^2.8.0",
+    "react-native-safe-area-context": "^4.3.1",
+    "react-native-screens": "^3.13.1"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",
@@ -28,8 +34,14 @@
   },
   "jest": {
     "preset": "react-native",
+    "timers": "fake",
+    "testEnvironment": "jsdom",         
+    "setupFiles": [
+      "./jestSetupFile.js"
+    ],
     "setupFilesAfterEnv": [
       "@testing-library/jest-native/extend-expect"
-    ]
+    ],
+    "moduleNameMapper": { "\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$": "<rootDir>/assetsTransformer.js", "\\.(css|less)$": "<rootDir>/assetsTransformer.js" }
   }
 }

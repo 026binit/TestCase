@@ -27,8 +27,6 @@ export default ({onSubmit}) => {
           value={password}
         />
         <Pressable style={styles.button} onPress={handleSubmit}>
-
-            
           <Text>Submit</Text>
         </Pressable>
       </View>

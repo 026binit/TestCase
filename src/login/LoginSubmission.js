@@ -74,7 +74,7 @@ const Spinner = () => {
 };
 
 // @ts-ignore
-export default () => {
+export default ({navigation}) => {
   const [formData, setFormData] = React.useState(null);
   const {status, responseData, errorMessage} = useFormSubmission({
     endpoint: ENDPOINT_URL,
@@ -85,13 +85,13 @@ export default () => {
   React.useEffect(() => {
     if (token) {
       (async () => await AsyncStorage.setItem('token', token))();
-      //navigation.navigate('Home');
       console.warn('navigate successfully');
     }
-  }, [token]);
+  }, [token, navigation]);
 
   if (status === 'resolved') {
     // TODO: navigate away on submission success
+    navigation.navigate('Home');
     Alert.alert('scucess');
     return null;
   }
