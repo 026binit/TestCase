@@ -37,6 +37,7 @@ export default ({onSubmit}) => {
 const styles = StyleSheet.create({
   body: {
     backgroundColor: Colors.white,
+    width: 400,
   },
   sectionContainer: {
     padding: 24,

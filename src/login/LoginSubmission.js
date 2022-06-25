@@ -1,107 +1,54 @@
-import React from 'react';
-import {Text, View, Alert} from 'react-native';
+import React, {useState} from 'react';
+import {Text, View, Alert, ActivityIndicator, StyleSheet} from 'react-native';
 import Login from './Login';
 //import {useNavigation} from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from 'axios';
 
-const ENDPOINT_URL =
-  'https://e2c168f9-97f3-42e1-8b31-57f4ab52a3bc.mock.pstmn.io/api/login';
+// const ENDPOINT_URL =
+//   'https://e2c168f9-97f3-42e1-8b31-57f4ab52a3bc.mock.pstmn.io/api/login';
+const ENDPOINT_URL = 'https://reqres.in/api/users';
 // @ts-ignore
-const formSubmissionReducer = (state, action) => {
-  switch (action.type) {
-    case 'START': {
-      return {status: 'pending', responseData: null, errorMessage: null};
-    }
-    case 'RESOLVE': {
-      return {
-        status: 'resolved',
-        responseData: action.responseData,
-        errorMessage: null,
-      };
-    }
-    case 'REJECT': {
-      return {
-        status: 'rejected',
-        responseData: null,
-        errorMessage: action.error.message,
-      };
-    }
-    default:
-      throw new Error(`Unsupported type: ${action.type}`);
-  }
-};
+
+const STYLES = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+});
 
 // @ts-ignore
-const useFormSubmission = ({endpoint, data}) => {
-  const [state, dispatch] = React.useReducer(formSubmissionReducer, {
-    status: 'idle',
-    responseData: null,
-    errorMessage: null,
-  });
-
-  const fetchBody = data ? JSON.stringify(data) : null;
-
-  React.useEffect(() => {
-    if (fetchBody) {
-      (async () => {
-        dispatch({type: 'START'});
-        try {
-          const response = await fetch(endpoint, {
-            method: 'POST',
-            body: fetchBody,
-            headers: {
-              'content-type': 'application/json',
-            },
-          });
-          const responseData = await response.json();
-          dispatch({type: 'RESOLVE', responseData});
-        } catch (error) {
-          dispatch({type: 'REJECT', error});
-        }
-      })();
+export default ({navigation}) => {
+  const [isLoading, setIsLoading] = useState(false);
+  const handleOnSubmit = async data => {
+    try {
+      setIsLoading(true);
+      if (data?.username && data?.password) {
+        const res = await axios.post(ENDPOINT_URL, JSON.stringify(data));
+        const id = res?.data?.id || '';
+        setIsLoading(false);
+        navigation.navigate('Home', {id});
+      } else {
+        throw new Error('Username and Password is required!');
+      }
+    } catch (error) {
+      setIsLoading(false);
+      Alert.alert(error?.message);
     }
-  }, [fetchBody, endpoint]);
-
-  return state;
-};
-
-const Spinner = () => {
+  };
   return (
-    <View accessibilityLabel="loading...">
-      <Text>loading...</Text>
+    <View style={STYLES.container}>
+      {isLoading ? (
+        <ActivityIndicator size={'large'} />
+      ) : (
+        <Login onSubmit={handleOnSubmit} />
+      )}
     </View>
   );
 };
 
-// @ts-ignore
-export default ({navigation}) => {
-  const [formData, setFormData] = React.useState(null);
-  const {status, responseData, errorMessage} = useFormSubmission({
-    endpoint: ENDPOINT_URL,
-    data: formData,
-  });
-  const token = responseData?.token;
-  // @ts-ignore
-  React.useEffect(() => {
-    if (token) {
-      (async () => await AsyncStorage.setItem('token', token))();
-      console.warn('navigate successfully');
-    }
-  }, [token, navigation]);
-
-  if (status === 'resolved') {
-    // TODO: navigate away on submission success
-    navigation.navigate('Home');
-    Alert.alert('scucess');
-    return null;
-  }
-
-  const handleOnSubmit = data => setFormData(data);
-  return (
-    <>
-      <Login onSubmit={handleOnSubmit} />
-      {status === 'pending' ? <Spinner /> : null}
-      <Text>{errorMessage}</Text>
-    </>
-  );
-};
+/*
+  {status === 'pending' ? <Spinner /> : null}
+  <Text>{errorMessage}</Text>
+*/
