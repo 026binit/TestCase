@@ -63,7 +63,7 @@ function generateRandomString(text) {
   return array;
 }
 
-const GameApp = ({text = 'You know nothing john snow'}) => {
+const GameApp = ({text = 'My name is Binit Jha'}) => {
   const [question, setQuestion] = useState(generateRandomString(text));
   const [answer, setAnswer] = useState([]);
   const [result, setResult] = useState(null);
