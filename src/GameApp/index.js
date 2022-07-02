@@ -47,24 +47,54 @@ const STYLES = StyleSheet.create({
   btnStyle: {
     backgroundColor: '#3391FF',
     padding: 10,
+    marginTop: 20,
+  },
+  paddingVertical10: {
+    paddingVertical: 10,
   },
 });
 
-const GameApp = () => {
-  const [unArrangedWordLists, setUnArrangedWordLists] = useState([
-    {id: 'un-1', word: 'john'},
-    {id: 'un-2', word: 'you'},
-    {id: 'un-3', word: 'snow'},
-    {id: 'un-4', word: 'nothing'},
-    {id: 'un-5', word: 'know'},
-  ]);
-  const [arrangedWordLists, setArrangedWordLists] = useState([
-    {id: 'arrn-1', word: 'you'},
-    {id: 'arrn-2', word: 'know'},
-    {id: 'arrn-3', word: 'nothing'},
-    {id: 'arrn-4', word: 'john'},
-    {id: 'arrn-5', word: 'snow'},
-  ]);
+function generateRandomString(text) {
+  const array = text.split(' ');
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+  return array;
+}
+
+const GameApp = ({text = 'You know nothing john snow'}) => {
+  const [question, setQuestion] = useState(generateRandomString(text));
+  const [answer, setAnswer] = useState([]);
+  const [result, setResult] = useState(null);
+
+  const unselectWord = word => {
+    const newAnswerArray = answer.filter(item => item !== word);
+    const newQuestionArray = [...question, word];
+    setAnswer(newAnswerArray);
+    setQuestion(newQuestionArray);
+    resetResult();
+  };
+
+  const checkResult = () => {
+    if (answer.join(' ') === text) {
+      setResult(true);
+    } else {
+      setResult(false);
+    }
+  };
+
+  const resetResult = () => {
+    setResult(null);
+  };
+
+  const selectWord = word => {
+    const newQuestionArray = question.filter(item => item !== word);
+    const newAnswerArray = [...answer, word];
+    setQuestion(newQuestionArray);
+    setAnswer(newAnswerArray);
+    resetResult();
+  };
 
   return (
     <ScrollView style={STYLES.container}>
@@ -78,11 +108,18 @@ const GameApp = () => {
         </Text>
 
         <View style={STYLES.box1}>
-          {arrangedWordLists.map(item => (
-            <TouchableOpacity key={item?.id} style={STYLES.boxItem}>
-              <Text>{item?.word}</Text>
-            </TouchableOpacity>
-          ))}
+          {question?.length > 0 ? (
+            <>
+              {question.map(item => (
+                <TouchableOpacity
+                  onPress={() => selectWord(item)}
+                  key={`un-${item}`}
+                  style={STYLES.boxItem}>
+                  <Text>{item}</Text>
+                </TouchableOpacity>
+              ))}
+            </>
+          ) : null}
         </View>
       </View>
 
@@ -90,19 +127,30 @@ const GameApp = () => {
         <Text style={STYLES.headingTxt}>Arranged Words</Text>
 
         <View style={STYLES.box1}>
-          {unArrangedWordLists.map(item => (
-            <TouchableOpacity key={item?.id} style={STYLES.boxItem}>
-              <Text>{item?.word}</Text>
-            </TouchableOpacity>
-          ))}
+          {answer?.length > 0 ? (
+            <>
+              {answer.map(item => (
+                <TouchableOpacity
+                  onPress={() => unselectWord(item)}
+                  key={`an-${item}`}
+                  style={STYLES.boxItem}>
+                  <Text>{item}</Text>
+                </TouchableOpacity>
+              ))}
+            </>
+          ) : null}
         </View>
       </View>
 
-      <View>
-        <Text style={STYLES.wrongAnsTxt}>Wrong Answer</Text>
-      </View>
+      {result !== null ? (
+        <View style={STYLES.paddingVertical10}>
+          <Text style={STYLES.wrongAnsTxt}>
+            {result ? 'Correct answer' : 'Wrong answer'}
+          </Text>
+        </View>
+      ) : null}
 
-      <TouchableOpacity style={STYLES.btnStyle}>
+      <TouchableOpacity onPress={checkResult} style={STYLES.btnStyle}>
         <Text style={STYLES.btnTxt}>Submit</Text>
       </TouchableOpacity>
     </ScrollView>
