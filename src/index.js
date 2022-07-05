@@ -4,3 +4,4 @@ import HomeScreen from './home/HomeScreen';
 import GameApp from './GameApp';
 
 export {Counter, LoginSubmission, HomeScreen, GameApp};
+export * from './post-list-app';

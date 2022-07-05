@@ -12,25 +12,32 @@ import {SafeAreaView, StyleSheet, useColorScheme} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 
-import {Counter, LoginSubmission, HomeScreen, GameApp} from './src';
+import {
+  Counter,
+  LoginSubmission,
+  HomeScreen,
+  GameApp,
+  PostLists,
+  PostDetail,
+} from './src';
 
 const Stack = createNativeStackNavigator();
 
 const App = () => {
   return (
-    <SafeAreaView>
-      <GameApp text={'My name is Binit Jha'} />
-    </SafeAreaView>
+    <NavigationContainer>
+      <Stack.Navigator>
+        <Stack.Screen name="PostLists" component={PostLists} />
+        <Stack.Screen name="PostDetail" component={PostDetail} />
+      </Stack.Navigator>
+    </NavigationContainer>
   );
 };
 
 export default App;
 
 /*
-<NavigationContainer>
-      <Stack.Navigator>
-        <Stack.Screen name="Login" component={LoginSubmission} />
-        <Stack.Screen name="Home" component={HomeScreen} />
-      </Stack.Navigator>
-    </NavigationContainer>
+<SafeAreaView>
+      <GameApp text={'My name is Binit Jha'} />
+    </SafeAreaView>
 */
