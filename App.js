@@ -9,8 +9,6 @@
 import React from 'react';
 import {SafeAreaView, StyleSheet, useColorScheme} from 'react-native';
 
-import {Colors} from 'react-native/Libraries/NewAppScreen';
-
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 
@@ -21,7 +19,7 @@ const Stack = createNativeStackNavigator();
 const App = () => {
   return (
     <SafeAreaView>
-      <GameApp />
+      <GameApp text={'My name is Binit Jha'} />
     </SafeAreaView>
   );
 };

@@ -63,7 +63,7 @@ function generateRandomString(text) {
   return array;
 }
 
-const GameApp = ({text = 'My name is Binit Jha'}) => {
+const GameApp = ({text}) => {
   const [question, setQuestion] = useState(generateRandomString(text));
   const [answer, setAnswer] = useState([]);
   const [result, setResult] = useState(null);
@@ -107,7 +107,7 @@ const GameApp = ({text = 'My name is Binit Jha'}) => {
           Arrange the words to form a sentence
         </Text>
 
-        <View style={STYLES.box1}>
+        <View accessibilityLabel="questions" style={STYLES.box1}>
           {question?.length > 0 ? (
             <>
               {question.map(item => (
@@ -126,7 +126,7 @@ const GameApp = ({text = 'My name is Binit Jha'}) => {
       <View style={STYLES.marginTop20}>
         <Text style={STYLES.headingTxt}>Arranged Words</Text>
 
-        <View style={STYLES.box1}>
+        <View accessibilityLabel="answers" style={STYLES.box1}>
           {answer?.length > 0 ? (
             <>
               {answer.map(item => (
