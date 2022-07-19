@@ -55,7 +55,7 @@ const PostList = ({navigation}) => {
           <PostRow
             item={item}
             index={index}
-            onPress={() => navigation.navigate('Post', {postId: item.id})}
+            onPress={() => navigation.navigate('PostDetail', {postId: item.id})}
           />
         )}
         keyExtractor={item => item.id.toString()}

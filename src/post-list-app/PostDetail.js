@@ -20,15 +20,15 @@ const styles = StyleSheet.create({
   },
 });
 
-const PostDetail = ({navigation}) => {
+const PostDetail = ({navigation, route}) => {
   const [post, setPost] = useState({});
   const [comments, setComments] = useState([]);
 
   useEffect(() => {
-    const postId = navigation.getParam('postId');
+    const postId = route?.params.postId;
     getPost(postId);
     getComments(postId);
-  }, [navigation]);
+  }, [route]);
 
   const getPost = postId => {
     api(`/posts/${postId}`).then(postDetail => {
@@ -44,7 +44,7 @@ const PostDetail = ({navigation}) => {
 
   return (
     <SafeAreaView>
-      <ScrollView contentContainerStyle={styles.content}>
+      <View style={styles.content}>
         <Text style={styles.title} testID="post-title">
           {post?.title}
         </Text>
@@ -59,7 +59,7 @@ const PostDetail = ({navigation}) => {
           )}
           keyExtractor={item => item.id.toString()}
         />
-      </ScrollView>
+      </View>
     </SafeAreaView>
   );
 };
