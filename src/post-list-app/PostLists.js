@@ -6,7 +6,7 @@ import {
   StyleSheet,
   FlatList,
 } from 'react-native';
-import {api} from '../utils/api';
+import axios from 'axios';
 
 const styles = StyleSheet.create({
   row: {
@@ -34,17 +34,29 @@ const PostList = ({navigation}) => {
     getPosts();
   }, []);
 
-  const getPosts = () => {
-    api('/posts')
-      .then(postRes => {
-        setPosts(postRes);
-        setLoading(false);
-        setError(null);
-      })
-      .catch(err => {
-        setLoading(false);
-        setError(err?.message);
-      });
+  const getPosts = async () => {
+    // api('/posts')
+    //   .then(postRes => {
+    //     setPosts(postRes);
+    //     setLoading(false);
+    //     setError(null);
+    //   })
+    //   .catch(err => {
+    //     setLoading(false);
+    //     setError(err?.message);
+    //   });
+    try {
+      const postRes = await axios.get(
+        'https://jsonplaceholder.typicode.com/posts',
+      );
+
+      setPosts(postRes?.data);
+      setLoading(false);
+      setError(null);
+    } catch (err) {
+      setLoading(false);
+      setError(err?.message);
+    }
   };
   return (
     <SafeAreaView>
